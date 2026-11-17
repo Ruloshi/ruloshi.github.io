@@ -46,19 +46,50 @@ section { padding:3rem 0; border-top:1px solid var(--line); }
 .facts dt { color:var(--muted); font-size:.82rem; }
 .facts dd { margin:0; font:400 2.2rem/1.1 'Bebas Neue', sans-serif; letter-spacing:.04em; }
 
-.pyr { width:100%; max-width:804px; height:auto; display:block; image-rendering:pixelated; background:#000; }
-figcaption { color:var(--muted); font-size:.86rem; margin-top:.8rem; max-width:62ch; }
+.pyr { width:100%; height:auto; display:block; image-rendering:pixelated; background:#000; }
+figcaption { color:var(--muted); font-size:.86rem; margin:.9rem auto 0; max-width:62ch; }
 figure { margin:0; }
 
-.contracts { list-style:none; padding:0; margin:0; display:grid; gap:.5rem; }
+.contracts { list-style:none; padding:0; margin:0; display:grid; gap:.8rem; }
 .contracts code { color:var(--muted); font-size:.86rem; overflow-wrap:anywhere; }
 .small { color:var(--muted); font-size:.86rem; }
 footer { padding:2rem 0 3.5rem; border-top:1px solid var(--line); }
 
+
+.top { display:flex; align-items:center; gap:.9rem; padding-top:1.4rem; }
+.brand { display:flex; align-items:center; gap:.6rem; text-decoration:none; font:400 1.9rem/1 'Bebas Neue', sans-serif; letter-spacing:.06em; }
+.brand img { border-radius:6px; }
+.tag { border:1px solid var(--red); color:var(--ink); font-size:.72rem; padding:.1rem .55rem; }
+.top .links { margin-left:auto; display:flex; gap:1.4rem; font-size:.9rem; }
+.hero figure { position:relative; }
+.hero figure::before { content:''; position:absolute; inset:8% 6%; background:radial-gradient(closest-side, rgba(212,42,0,.35), transparent 72%); z-index:-1; }
+.rule { display:flex; flex-wrap:wrap; gap:1rem 1.4rem; margin:1.6rem 0 .6rem; }
+.case { display:grid; justify-items:center; gap:.35rem; }
+.case .row { display:flex; gap:2px; }
+.c { width:1.15rem; height:1.15rem; background:var(--cell-dead); border:1px solid #333; }
+.c.on { background:var(--red); border-color:var(--red); }
+.case .res { margin-top:.15rem; }
+.pyr-fig { margin:2.4rem auto 0; text-align:center; }
+.pyr { margin:0 auto; max-width:900px; }
+.pyr-bar { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.8rem 1.6rem; margin-top:1rem; font-size:.86rem; color:var(--muted); }
+.pyr-bar .key i { display:inline-block; width:.8rem; height:.8rem; margin-right:.4rem; vertical-align:-.1em; background:var(--cell-dead); border:1px solid #333; }
+.pyr-bar .key i.on { background:var(--red); border-color:var(--red); }
+#cellinfo { min-width:22ch; color:var(--ink); }
+button.small-btn { font:700 .86rem 'Space Mono', monospace; color:var(--ink); background:none; border:1px solid #555; padding:.35rem .9rem; cursor:pointer; }
+button.small-btn:hover { background:var(--ink); color:#000; border-color:var(--ink); }
+button.small-btn:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
+.contracts li { border:1px solid var(--line); padding:1rem 1.2rem; display:flex; flex-wrap:wrap; gap:.4rem 1.2rem; align-items:center; justify-content:space-between; }
+.contracts li > div { min-width:0; }
+@media (max-width:560px) { .top { flex-wrap:wrap; } .top .links { margin-left:0; width:100%; gap:1.2rem; } }
 @media (max-width:760px) { .hero { grid-template-columns:1fr; padding-top:2rem; } .hero img { max-width:420px; } }
 </style>
 </head>
 <body>
+<nav class="top wrap" id="top">
+  <a class="brand" href="#top"><img src="favicon.png" alt="" width="30" height="30"><span>R30</span></a>
+  <span class="tag">Testnet</span>
+  <div class="links"><a href="https://ruloshi.github.io/r30/">App</a><a href="https://github.com/Ruloshi/r30">GitHub</a><a href="#contracts">Contracts</a></div>
+</nav>
 <main class="wrap">
   <header class="hero">
     <div>
@@ -70,7 +101,7 @@ footer { padding:2rem 0 3.5rem; border-top:1px solid var(--line); }
         <a class="btn" href="https://github.com/Ruloshi/r30">Read the source on GitHub</a>
       </div>
     </div>
-    <img src="shell.png" width="1024" height="1032" alt="A red Conus textile sea shell covered in white triangles, the natural pattern that looks like Rule 30">
+    <figure><img src="shell.png" width="1024" height="1032" alt="A red Conus textile sea shell covered in white triangles, the natural pattern that looks like Rule 30"></figure>
   </header>
 
   <section>
@@ -91,17 +122,24 @@ footer { padding:2rem 0 3.5rem; border-top:1px solid var(--line); }
   <section>
     <h2>Why Rule 30</h2>
     <p>Each cell looks only at its left, centre and right neighbours, yet the pattern it draws is so irregular that Wolfram Mathematica has used its centre column as a random number generator since 1988. The same pattern appears on the shell of the Conus textile.</p>
-    <figure>
-      <canvas id="pyr" class="pyr" aria-label="The first 100 rows of Rule 30 drawn as a pyramid, Alive cells in red" role="img"></canvas>
-      <figcaption>The 100 rows of the pyramid, computed live in your browser. 5,196 of its 10,000 cells are Alive (red); the rest are Dead.</figcaption>
+    <p>That is the whole rule. For each of the 8 possible neighbourhoods, the cell below turns red (Alive) or stays dark (Dead). Read the bottom line as a binary number, 00011110, and you get 30.</p>
+    <div class="rule" id="rule" role="img" aria-label="Rule 30 table: neighbourhoods 111, 110, 101 and 000 give Dead; 100, 011, 010 and 001 give Alive"></div>
+    <figure class="pyr-fig">
+      <canvas id="pyr" class="pyr" aria-label="The 100 rows of Rule 30 drawn as a pyramid, Alive cells in red" role="img">The 100 rows of Rule 30 drawn as a pyramid.</canvas>
+      <div class="pyr-bar">
+        <span class="key"><i class="on"></i>Alive</span><span class="key"><i></i>Dead</span>
+        <output id="cellinfo">Hover a cell to see its number</output>
+        <button class="small-btn" id="replay" type="button">Replay</button>
+      </div>
+      <figcaption>The 100 rows of the pyramid, computed live in your browser. 5,196 of its 10,000 cells are Alive; the rest are Dead.</figcaption>
     </figure>
   </section>
 
-  <section>
+  <section id="contracts">
     <h2>Contracts</h2>
     <ul class="contracts">
-      <li><a href="https://sepolia.etherscan.io/address/0x83402A0A68559195699DFaC2848ADf1a636A8D78">Token on Etherscan (Sepolia)</a><br><code>0x83402A0A68559195699DFaC2848ADf1a636A8D78</code></li>
-      <li><a href="https://sepolia.etherscan.io/address/0x04E301DBf0D5767e732B87eE4D484e806cB15c2A">Market on Etherscan (Sepolia)</a><br><code>0x04E301DBf0D5767e732B87eE4D484e806cB15c2A</code></li>
+      <li><div><a href="https://sepolia.etherscan.io/address/0x83402A0A68559195699DFaC2848ADf1a636A8D78">Token on Etherscan (Sepolia)</a><br><code>0x83402A0A68559195699DFaC2848ADf1a636A8D78</code></div><button class="small-btn copy" type="button" data-a="0x83402A0A68559195699DFaC2848ADf1a636A8D78">Copy address</button></li>
+      <li><div><a href="https://sepolia.etherscan.io/address/0x04E301DBf0D5767e732B87eE4D484e806cB15c2A">Market on Etherscan (Sepolia)</a><br><code>0x04E301DBf0D5767e732B87eE4D484e806cB15c2A</code></div><button class="small-btn copy" type="button" data-a="0x04E301DBf0D5767e732B87eE4D484e806cB15c2A">Copy address</button></li>
     </ul>
   </section>
 </main>
@@ -115,14 +153,14 @@ footer { padding:2rem 0 3.5rem; border-top:1px solid var(--line); }
 
 <script>
 (function () {
-  var N = 201, R = 100, CS = 4, rows = [], p = new Uint8Array(N);
+  var N = 201, R = 100, CS = 6, rows = [], p = new Uint8Array(N), next = 0, still = false;
   p[100] = 1; rows.push(p);
   for (var r = 1; r < R; r++) {
     var q = rows[r - 1], n = new Uint8Array(N);
     for (var c = 0; c < N; c++) n[c] = (c ? q[c - 1] : 0) ^ (q[c] | (c < N - 1 ? q[c + 1] : 0));
     rows.push(n);
   }
-  var cv = document.getElementById('pyr'), ctx = cv.getContext('2d'), next = 0;
+  var cv = document.getElementById('pyr'), ctx = cv.getContext('2d'), info = document.getElementById('cellinfo');
   cv.width = N * CS; cv.height = R * CS;
   function drawRow(i) {
     for (var c = 100 - i; c <= 100 + i; c++) {
@@ -132,8 +170,38 @@ footer { padding:2rem 0 3.5rem; border-top:1px solid var(--line); }
   }
   function all() { while (next < R) drawRow(next++); }
   function step() { for (var k = 0; k < 2 && next < R; k++) drawRow(next++); if (next < R) requestAnimationFrame(step); }
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) { all(); return; }
-  new IntersectionObserver(function (e, o) { if (e[0].isIntersecting) { o.disconnect(); step(); } }, { threshold: .3 }).observe(cv);
+  function play() { next = 0; ctx.clearRect(0, 0, cv.width, cv.height); if (still) all(); else step(); }
+  still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (still || !('IntersectionObserver' in window)) { still = true; all(); }
+  else new IntersectionObserver(function (e, o) { if (e[0].isIntersecting) { o.disconnect(); step(); } }, { threshold: .3 }).observe(cv);
+  document.getElementById('replay').addEventListener('click', play);
+
+  // hover: cell number, same numbering as the contract (row squared + position in the row)
+  cv.addEventListener('pointermove', function (e) {
+    var b = cv.getBoundingClientRect(), col = Math.floor((e.clientX - b.left) / b.width * N), row = Math.floor((e.clientY - b.top) / b.height * R);
+    if (row < 0 || row >= next || col < 100 - row || col > 100 + row) { info.textContent = 'Hover a cell to see its number'; return; }
+    info.textContent = 'Cell #' + (row * row + col - (100 - row)).toLocaleString('en-US') + ' · row ' + row + ' · ' + (rows[row][col] ? 'Alive' : 'Dead');
+  });
+  cv.addEventListener('pointerleave', function () { info.textContent = 'Hover a cell to see its number'; });
+
+  // the rule table
+  var box = document.getElementById('rule');
+  for (var k = 7; k >= 0; k--) {
+    var d = document.createElement('div'); d.className = 'case';
+    var top = document.createElement('div'); top.className = 'row';
+    for (var b = 2; b >= 0; b--) { var s = document.createElement('span'); s.className = 'c' + ((k >> b) & 1 ? ' on' : ''); top.appendChild(s); }
+    var res = document.createElement('span'); res.className = 'c res' + ((30 >> k) & 1 ? ' on' : '');
+    d.appendChild(top); d.appendChild(res); box.appendChild(d);
+  }
+
+  // copy buttons
+  document.querySelectorAll('.copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var t = btn.getAttribute('data-a');
+      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { btn.textContent = 'Copied'; }, function () { btn.textContent = 'Select and copy above'; });
+      setTimeout(function () { btn.textContent = 'Copy address'; }, 1600);
+    });
+  });
 })();
 </script>
 </body>
